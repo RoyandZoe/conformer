@@ -4,7 +4,7 @@ from paddle import nn
 from paddle import Tensor
 from typing import Optional
 import paddle.nn.functional as F
-from conformer.FFN import Linear
+from FFN import Linear
 
 
 class RelativeMultiHeadAttention(nn.Layer):
@@ -81,8 +81,8 @@ class RelativeMultiHeadAttention(nn.Layer):
         attn = F.softmax(score, -1)
         attn = self.dropout(attn)
 
-        context = paddle.matmul(attn, value).transpose(1, 2)
-        context = context.contiguous().view(batch_size, -1, self.d_model)
+        context = paddle.matmul(attn, value).transpose([0, 2, 1, 3])
+        context = context.reshape([batch_size, -1, self.d_model])
 
         return self.out_proj(context)
 

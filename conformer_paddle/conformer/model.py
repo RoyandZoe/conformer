@@ -16,8 +16,8 @@ import paddle.nn as nn
 from paddle import Tensor
 from typing import Tuple
 
-from conformer.encoder import ConformerEncoder
-from conformer.FFN import Linear
+from encoder import ConformerEncoder
+from FFN import Linear
 
 
 class Conformer(nn.Layer):

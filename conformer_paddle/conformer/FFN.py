@@ -45,10 +45,11 @@ class GLU(nn.Layer):
     def __init__(self, dim: int) -> None:
         super(GLU, self).__init__()
         self.dim = dim
+        self.sigmoid = nn.Sigmoid()
 
     def forward(self, inputs: Tensor) -> Tensor:
         outputs, gate = inputs.chunk(2, axis=self.dim)
-        return outputs * gate.sigmoid()
+        return outputs * self.sigmoid(gate)
 
 
 # sub_block

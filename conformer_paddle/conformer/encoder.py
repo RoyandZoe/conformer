@@ -16,9 +16,9 @@ import paddle.nn as nn
 from paddle import Tensor
 from typing import Tuple
 
-from conformer.FFN import FFN, Linear
-from conformer.attention import MHSA
-from conformer.conv import ConformerConvModule, Conv2dSubampling
+from FFN import FFN, Linear
+from attention import MHSA
+from conv import ConformerConvModule, Conv2dSubampling
 
 
 class ResidualConnectionModule(nn.Layer):

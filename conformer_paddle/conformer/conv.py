@@ -15,7 +15,7 @@ import paddle
 from paddle import nn
 from paddle import Tensor
 from typing import Tuple
-from conformer.FFN import Swish, GLU
+from FFN import Swish, GLU
 
 
 class Transpose(nn.Layer):
@@ -26,7 +26,7 @@ class Transpose(nn.Layer):
         self.shape = shape
 
     def forward(self, x: Tensor) -> Tensor:
-        return x.transpose(*self.shape)
+        return x.transpose([0, 2, 1])
 
 
 class DepthwiseConv1d(nn.Layer):
@@ -157,7 +157,8 @@ class ConformerConvModule(nn.Layer):
         )
 
     def forward(self, inputs: Tensor) -> Tensor:
-        return self.sequential(inputs).transpose(1, 2)
+        # print(inputs.shape)
+        return self.sequential(inputs).transpose([0, 2, 1])
 
 
 class Conv2dSubampling(nn.Layer):
@@ -193,10 +194,12 @@ class Conv2dSubampling(nn.Layer):
         # outputs.permute(0, 2, 1, 3)
         outputs = paddle.reshape(outputs, shape=[batch_size, subsampled_lengths, channels * sumsampled_dim])
         # outputs.contiguous().view(batch_size, subsampled_lengths, channels * sumsampled_dim)
-        print(type(input_lengths), input_lengths)
-
-        # output_lengths = input_lengths >> 2
-        # output_lengths -= 1
-        output_lengths = outputs.shape[1]
+        # print('fgdfdfd:', type(input_lengths), input_lengths)
+        # print(outputs.shape)
+        va = paddle.to_tensor([4])
+        di = paddle.to_tensor([1])
+        output_lengths = input_lengths/va
+        output_lengths -= di
+        # output_lengths = outputs.shape[1]
 
         return outputs, output_lengths
